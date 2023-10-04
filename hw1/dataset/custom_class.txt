@@ -1,0 +1,12 @@
+0 throw
+1 climb ice wall
+2 riding horse
+3 climb wall
+4 climb wall with line
+5 dance
+6 japan
+7 baseball
+8 golf
+9 tennis
+10 water
+11 riding bike
