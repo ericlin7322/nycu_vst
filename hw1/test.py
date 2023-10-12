@@ -74,7 +74,7 @@ def test():
     # dataset = CustomImageDataset(root_dir=image_folder)
     # dataloader = DataLoader(dataset, batch_size=1, shuffle=False)
 
-    testing_data = CustomImageDataset('dataset/test.csv', 'dataset/test')
+    testing_data = CustomImageDataset('dataset/custom_test.csv', 'dataset/test')
     dataloader = DataLoader(testing_data, batch_size=1, shuffle=False)
 
     size = len(dataloader.dataset)

@@ -2,7 +2,7 @@
 1 climb ice wall
 2 riding horse
 3 climb wall
-4 climb wall with line
+4 table tennis
 5 dance
 6 japan
 7 baseball

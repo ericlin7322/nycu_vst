@@ -45,7 +45,7 @@ class my_network(nn.Module): # Don't modify the name of this class.
         self.maxpool = nn.MaxPool2d(kernel_size=3, stride=2, padding=1)
         
         block = BasicBlock
-        num_blocks = [1, 1, 1, 1]
+        num_blocks = [2, 2, 1, 1]
 
         # Create layers of BasicBlocks
         self.layer1 = self._make_layer(block, 8, num_blocks[0], stride=1)
