@@ -1,7 +1,7 @@
 # import your model from net.py
 from net import my_network
 
-from train import CustomImageDataset
+# from train import CustomImageDataset
 
 from torchvision.datasets import ImageFolder
 import torch
@@ -25,10 +25,6 @@ class CustomImageDataset(ImageFolder):
         self.transform = transform
         self.file_list = sorted(os.listdir(root_dir), key=lambda x: int(x.replace(".jpg", "")))
 
-        # Define normalization parameters (mean and std) for your dataset
-        self.mean = [0.5, 0.5, 0.5]
-        self.std = [0.5, 0.5, 0.5]
-
     def __len__(self):
         return len(self.file_list)
 
@@ -46,7 +42,6 @@ class CustomImageDataset(ImageFolder):
 
         image = transforms.Compose([
             transforms.ToTensor(),
-            transforms.Normalize(mean=self.mean, std=self.std)
         ])(image)
 
         if self.transform:
@@ -94,6 +89,7 @@ def test():
             file.write(f"{filename[0]},{predicted_class}\n")
 
     # with torch.no_grad(), open(output_file, "w") as file:
+    #     file.write("name,label\n")
     #     for X, y, filename in dataloader:
     #         X, y = X.to(device), y.to(device)
     #         pred = model(X)
