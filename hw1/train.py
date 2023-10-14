@@ -4,6 +4,7 @@ import torch
 import torch.nn as nn
 import torch.optim as optim
 from torch.utils.data import DataLoader
+from torch.utils.data.dataset import random_split
 import torchvision.transforms as transforms
 from torchvision.io import read_image
 
@@ -66,7 +67,7 @@ def train():
     criterion = nn.CrossEntropyLoss()
     optimizer = optim.SGD(model.parameters(), lr=learning_rate, momentum=0.9)
 
-    training_data = CustomImageDataset('dataset/train.csv', './dataset/train')
+    training_data = CustomImageDataset('./dataset/train.csv', './dataset/train')
     train_loader = DataLoader(training_data, batch_size=16  , shuffle=True)
 
     for epoch in range(num_epochs):

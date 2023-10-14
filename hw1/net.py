@@ -38,9 +38,9 @@ class my_network(nn.Module): # Don't modify the name of this class.
     
     def __init__(self, num_classes=12):
         super(my_network, self).__init__()
-        self.in_channels = 8
-        self.conv1 = nn.Conv2d(3, 8, kernel_size=7, stride=2, padding=3, bias=False)
-        self.bn1 = nn.BatchNorm2d(8)
+        self.in_channels = 6
+        self.conv1 = nn.Conv2d(3, 6, kernel_size=7, stride=2, padding=3, bias=False)
+        self.bn1 = nn.BatchNorm2d(6)
         self.relu = nn.ReLU(inplace=True)
         self.maxpool = nn.MaxPool2d(kernel_size=3, stride=2, padding=1)
         
@@ -48,7 +48,7 @@ class my_network(nn.Module): # Don't modify the name of this class.
         num_blocks = [2, 2, 1, 1]
 
         # Create layers of BasicBlocks
-        self.layer1 = self._make_layer(block, 8, num_blocks[0], stride=1)
+        self.layer1 = self._make_layer(block, 6, num_blocks[0], stride=1)
         self.layer2 = self._make_layer(block, 12, num_blocks[1], stride=2)
         
         self.avgpool = nn.AdaptiveAvgPool2d(1)

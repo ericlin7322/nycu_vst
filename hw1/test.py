@@ -18,41 +18,41 @@ from torchvision.io import read_image
     You should read the .jpg files located in "./dataset/test/", make predictions based on the weight file "./w_{student_id}.pth", and save the results to "./pred_{student_id}.csv".
 '''
 
-# # Create a custom dataset class to load images from a specific folder
-# class CustomImageDataset(ImageFolder):
-#     def __init__(self, root_dir, transform=None):
-#         self.root_dir = root_dir
-#         self.transform = transform
-#         self.file_list = sorted(os.listdir(root_dir), key=lambda x: int(x.replace(".jpg", "")))
+# Create a custom dataset class to load images from a specific folder
+class CustomImageDataset(ImageFolder):
+    def __init__(self, root_dir, transform=None):
+        self.root_dir = root_dir
+        self.transform = transform
+        self.file_list = sorted(os.listdir(root_dir), key=lambda x: int(x.replace(".jpg", "")))
 
-#         # Define normalization parameters (mean and std) for your dataset
-#         self.mean = [0.5, 0.5, 0.5]
-#         self.std = [0.5, 0.5, 0.5]
+        # Define normalization parameters (mean and std) for your dataset
+        self.mean = [0.5, 0.5, 0.5]
+        self.std = [0.5, 0.5, 0.5]
 
-#     def __len__(self):
-#         return len(self.file_list)
+    def __len__(self):
+        return len(self.file_list)
 
-#     def __getitem__(self, idx):
-#         img_path = os.path.join(self.root_dir, self.file_list[idx])
-#         image = read_image(img_path).float()
+    def __getitem__(self, idx):
+        img_path = os.path.join(self.root_dir, self.file_list[idx])
+        image = read_image(img_path).float()
 
-#         # Check the number of channels in the image
-#         if image.shape[0] == 1:
-#             # If it's a single channel image, duplicate it to make it RGB
-#             image = torch.cat([image, image, image], dim=0)
+        # Check the number of channels in the image
+        if image.shape[0] == 1:
+            # If it's a single channel image, duplicate it to make it RGB
+            image = torch.cat([image, image, image], dim=0)
 
-#         # Convert the torch tensor to a PIL Image
-#         image = transforms.ToPILImage()(image)
+        # Convert the torch tensor to a PIL Image
+        image = transforms.ToPILImage()(image)
 
-#         image = transforms.Compose([
-#             transforms.ToTensor(),
-#             transforms.Normalize(mean=self.mean, std=self.std)
-#         ])(image)
+        image = transforms.Compose([
+            transforms.ToTensor(),
+            transforms.Normalize(mean=self.mean, std=self.std)
+        ])(image)
 
-#         if self.transform:
-#             image = self.transform(image)
+        if self.transform:
+            image = self.transform(image)
 
-#         return image, self.file_list[idx]
+        return image, self.file_list[idx]
 
 def test():
     device = (
@@ -71,11 +71,11 @@ def test():
 
     image_folder = 'dataset/test'
 
-    # dataset = CustomImageDataset(root_dir=image_folder)
-    # dataloader = DataLoader(dataset, batch_size=1, shuffle=False)
+    dataset = CustomImageDataset(root_dir=image_folder)
+    dataloader = DataLoader(dataset, batch_size=1, shuffle=False)
 
-    testing_data = CustomImageDataset('dataset/custom_test.csv', 'dataset/test')
-    dataloader = DataLoader(testing_data, batch_size=1, shuffle=False)
+    # testing_data = CustomImageDataset('dataset/custom_test.csv', 'dataset/test')
+    # dataloader = DataLoader(testing_data, batch_size=1, shuffle=False)
 
     size = len(dataloader.dataset)
     num_batches = len(dataloader)
@@ -84,28 +84,28 @@ def test():
 
     output_file = "./pred_312551169.csv"
 
-    # with torch.no_grad(), open(output_file, "w") as file:
-    #     file.write("name,label\n")
-    #     for X, filename in dataloader:
-    #         X = X.to(device)
-    #         pred = model(X)
-
-    #         predicted_class = pred.argmax(1).item()
-    #         file.write(f"{filename[0]},{predicted_class}\n")
-
     with torch.no_grad(), open(output_file, "w") as file:
-        for X, y, filename in dataloader:
-            X, y = X.to(device), y.to(device)
+        file.write("name,label\n")
+        for X, filename in dataloader:
+            X = X.to(device)
             pred = model(X)
 
             predicted_class = pred.argmax(1).item()
             file.write(f"{filename[0]},{predicted_class}\n")
 
-            test_loss += criterion(pred, y).item()
-            correct += (pred.argmax(1) == y).type(torch.float).sum().item()
-    test_loss /= num_batches
-    correct /= size
-    print(f"Test Error: \n Accuracy: {(100*correct):>0.1f}%, Avg loss: {test_loss:>8f} \n")
+    # with torch.no_grad(), open(output_file, "w") as file:
+    #     for X, y, filename in dataloader:
+    #         X, y = X.to(device), y.to(device)
+    #         pred = model(X)
+
+    #         predicted_class = pred.argmax(1).item()
+    #         file.write(f"{filename[0]},{predicted_class}\n")
+
+    #         test_loss += criterion(pred, y).item()
+    #         correct += (pred.argmax(1) == y).type(torch.float).sum().item()
+    # test_loss /= num_batches
+    # correct /= size
+    # print(f"Test Error: \n Accuracy: {(100*correct):>0.1f}%, Avg loss: {test_loss:>8f} \n")
 
 
 if __name__=="__main__":
