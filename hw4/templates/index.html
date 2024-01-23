@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Demo</title>
+  <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+  <style>
+    body {
+        text-align: center;
+    }
+    video {
+        width: 90%;
+        max-width: 1200px;
+        display: block;
+        margin: 0 auto;
+    }
+  </style>
+</head>
+
+<body>
+
+  <h1>Demo</h1>
+
+  <video id="video" controls onclick="getVideoPosition(event)"></video>
+
+  <script>
+    var video = document.getElementById('video');
+    var hls = new Hls();
+
+    if (Hls.isSupported()) {
+      hls.loadSource('video/output.m3u8');
+      hls.attachMedia(video);
+    } 
+    else if (video.canPlayType('application/vnd.apple.mpegurl')) {
+      video.src = 'video/output.m3u8';
+    }
+
+    function getVideoPosition(event) {
+        var rect = video.getBoundingClientRect();
+        var x = event.clientX - rect.left;
+        var y = event.clientY - rect.top;
+        var video_heigt = video.offsetHeight;
+        var video_width = video.offsetWidth;
+        var tempx = x*100/video_width
+        var tempy = y*100/video_heigt
+        console.log("Video(W,H):",video_width, video_heigt,", Mouse：", tempx, tempy);
+        fetch('/send_location', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ tempx, tempy }),
+        });
+
+    }
+
+  </script>
+
+
+<script>
+  var video = document.getElementById('video');
+  video.addEventListener('click', function () {
+    event.preventDefault();
+  });
+</script>
+
+</body>
+
+</html>
